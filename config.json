@@ -1,0 +1,6 @@
+{
+  "mqtt_host": "mqtt.broker.net",
+  "mqtt_port": 8883,
+  "username": "user",
+  "password": "password"
+}
