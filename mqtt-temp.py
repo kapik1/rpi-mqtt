@@ -41,7 +41,8 @@ device_file = '/w1_slave'
 def read_temp(t_id):
     valid = False
     temp = 0
-    with open(base_dir + t_id + device_file , 'r') as f:
+    try:
+      with open(base_dir + t_id + device_file , 'r') as f:
         for line in f:
             if line.strip()[-3:] == 'YES':
                 valid = True
@@ -49,10 +50,15 @@ def read_temp(t_id):
             if temp_pos != -1:
                 temp = round(float(line[temp_pos + 3:]) / 1000.0,1)
 
-    if valid:
+      if valid:
         return temp
-    else:
+      else:
         return None
+    except:
+        # device missing on the bus
+        return None
+    else:
+        return
 
 
 while True:
@@ -65,6 +71,7 @@ while True:
                         hostname=config['mqtt_host'], port=config['mqtt_port'],
                         auth=auth, tls={})
             except:
+                # Broker is unreachable
                 time.sleep(120)
             else:
                 time.sleep(2)
