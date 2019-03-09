@@ -58,7 +58,7 @@ def read_temp(t_id):
 while True:
     for tl in termo:    
         temp = read_temp(tl[0])
-        print ("Read ",tl[0],"Value: ",temp," Topic",pub_topic + tl[1],"\n")
+        # print ("Read ",tl[0],"Value: ",temp," Topic",pub_topic + tl[1],"\n")
         if temp is not None:
             try:
                 publish.single(pub_topic + tl[1], str(temp),
