@@ -20,18 +20,7 @@ auth = {
 
 pub_topic = 'home/temperature/'
 termo = [
-        ["10-000000402bfe","temp_int_boiler_inlet"],
-        ["10-000000403a79","temp_int_boiler_bottom"],
-        ["28-00000271a53b","temp_int_outdoor_north"],
-        ["28-00000272109a","temp_int_outdoor_south"],
-        ["28-000002722a65","temp_int_boiler_top"],
-        ["28-0000027245f4","temp_int_boiler_middle"],
-        ["28-000002726502","temp_int_solar_pannel"],
-        ["28-000002728c5c","temp_int_boiler_outlet"],
-        ["28-00000272b64e","temp_int_boiler_room"],
-        ["28-0000027231b7","temp_int_heating_backward"],
-        ["28-00000272c3c9","temp_int_hall_room"],
-        ["28-00000272f500","temp_int_heating_input"]
+        ["28-00000a4ac5ae","temp_int_portable"],
 ]
 
 

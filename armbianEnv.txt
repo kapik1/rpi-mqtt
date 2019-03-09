@@ -1,0 +1,11 @@
+verbosity=1
+logo=disabled
+console=serial
+disp_mode=1920x1080p60
+overlay_prefix=sun8i-h3
+overlays=usbhost2 usbhost3 w1-gpio
+param_w1_pin=PA06
+rootdev=UUID=10cd9eef-d0df-424c-9498-55f403128f3b
+rootfstype=ext4
+param_w1_pin_int_pullup=1
+usbstoragequirks=0x2537:0x1066:u,0x2537:0x1068:u
