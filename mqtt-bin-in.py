@@ -4,8 +4,9 @@ import glob
 import json
 import time
 import paho.mqtt.publish as publish
+import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
-
+import ssl
 
 config = {}
 try:
@@ -45,15 +46,33 @@ for g2 in gpio:
 
 def send_msg(topic,val):
     try:
-        print ("Send value: ",val," Topic",topic,"\n")
-        publish.single(topic,val,
-        hostname=config['mqtt_host'], port=config['mqtt_port'],
-        auth=auth, tls={})
+        #print ("Send value: ",val," Topic",topic)
+        #publish.single(topic,val,
+        #hostname=config['mqtt_host'], port=config['mqtt_port'],
+        #auth=auth, tls={})
+        client.publish(topic,val,0,0)
     except:
          time.sleep(120)
-    else:
-         time.sleep(1)
     return
 
-while True:
-        time.sleep(100)       
+def on_connect(client, userdata, rc, *extra_params):
+    #print('Connected with result code ' + str(rc))
+    for g2 in gpio:
+        #print ("Subscribe",pub_topic + g2[1] + '/set')
+        #client.publish(pub_topic + g2[1],0,0,0)
+        send_msg(pub_topic + g2[1],0 if GPIO.input(int(g2[0])) else 1 )
+
+client = mqtt.Client(client_id='RPI-MQTT-IN'
+        '', clean_session=True, userdata=None)
+client.tls_set(ca_certs=None, certfile=None,
+                keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
+                tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+client.tls_insecure_set(False)
+client.username_pw_set(config['username'], password=config['password'])
+client.on_connect = on_connect
+client.connect(config['mqtt_host'], port=config['mqtt_port'], keepalive=120)
+
+try:
+    client.loop_forever()
+except KeyboardInterrupt:
+     GPIO.cleanup()
