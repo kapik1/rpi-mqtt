@@ -13,10 +13,10 @@ except Exception as e:
             exit(1)
 
 gpio = [
-        [14,"bin_out_heating"],
-        [15,"bin_out_light_gate"],
-        [18,"bin_out_light_door"],
-        [23,"bin_out_light_court"]
+        [14,"bin_out_heating","ON","OFF"],
+        [15,"bin_out_light_gate","ON","OFF"],
+        [18,"bin_out_light_door","ON","OFF"],
+        [23,"bin_out_light_court","ON","OFF"]
 ]
 pub_topic = 'home/outputs/'
 
@@ -27,28 +27,38 @@ def on_connect(client, userdata, rc, *extra_params):
     for g2 in gpio:
         #print ("Subscribe",pub_topic + g2[1] + '/set')
         client.subscribe(pub_topic + g2[1] + '/set')
-        client.publish(pub_topic + g2[1],0,0,0)
+        client.publish(pub_topic + g2[1],g2[3],0,0)
 
 
 def on_message(client, userdata, msg):
-    #print ('Topic: ' + msg.topic + '\nMessage: ' + str(msg.payload))
+    #print ('Topic: ' + msg.topic + ' Message: ' + str(msg.payload.decode('ascii')))
     data = msg.topic.split("/")
-    #print ("SET " + data[2] + " Gpio ", ch[data[2]] )
-    client.publish(pub_topic + data[2],set_gpio_status(ch[data[2]],int(msg.payload)),0,0)
+    client.publish(pub_topic + data[2],set_gpio_status(ch[data[2]],msg.payload.decode('ascii')),0,0)
 
 
 def set_gpio_status(pin, status):
-    GPIO.output(pin, GPIO.LOW if status else GPIO.HIGH)
-    return (1 if status else 0)
+    #print ('set: status: ' + status)
+    #if (status == "true") or (int(status) == 1) or (status is "ON"):
+    #if status == "ON" or  status == "1" or status == "true":
+    if ((status == "1") or (status == "ON") or (status == "true")):
+        GPIO.output(pin, GPIO.LOW)
+        return ch_on[pin]
+    else:
+        GPIO.output(pin, GPIO.HIGH)
+        return ch_off[pin]
 
 
 GPIO.setmode(GPIO.BCM)
 
 ch = dict()
+ch_on = dict()
+ch_off = dict()
 for g2 in gpio:
     #print ("Gpio setup",  g2[0])
     GPIO.setup(g2[0], GPIO.OUT, initial=GPIO.HIGH)
     ch[g2[1]] = g2[0]	
+    ch_on[g2[0]] = g2[2]	
+    ch_off[g2[0]] = g2[3]	
 
 
 
