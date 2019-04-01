@@ -42,36 +42,31 @@ def read_temp(t_id):
     valid = False
     temp = 0
     try:
-      with open(base_dir + t_id + device_file , 'r') as f:
+     with open(base_dir + t_id + device_file , 'r') as f:
         for line in f:
             if line.strip()[-3:] == 'YES':
                 valid = True
             temp_pos = line.find(' t=')
             if temp_pos != -1:
                 temp = round(float(line[temp_pos + 3:]) / 1000.0,1)
-
-      if valid:
-        return temp
-      else:
-        return None
     except:
-        # device missing on the bus
         return None
+    if valid:
+        return temp
     else:
-        return
+        return None
 
 
 while True:
     for tl in termo:    
         temp = read_temp(tl[0])
-        print ("Read ",tl[0],"Value: ",temp," Topic",pub_topic + tl[1],"\n")
+        # print ("Read ",tl[0],"Value: ",temp," Topic",pub_topic + tl[1],"\n")
         if temp is not None:
             try:
                 publish.single(pub_topic + tl[1], str(temp),
-                        hostname=config['mqtt_host'], port=config['mqtt_port'],
+                        hostname=config['mqtt_host'], port=config['mqtt_port'],retain=1,qos=2,
                         auth=auth, tls={})
             except:
-                # Broker is unreachable
                 time.sleep(120)
             else:
                 time.sleep(2)

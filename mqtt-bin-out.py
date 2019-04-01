@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
 import json
 import ssl
+import time
 
 
 config = {}
@@ -33,7 +34,8 @@ def on_connect(client, userdata, rc, *extra_params):
 def on_message(client, userdata, msg):
     #print ('Topic: ' + msg.topic + ' Message: ' + str(msg.payload.decode('ascii')))
     data = msg.topic.split("/")
-    client.publish(pub_topic + data[2],set_gpio_status(ch[data[2]],msg.payload.decode('ascii')),0,0)
+    #time.sleep(1)
+    client.publish(pub_topic + data[2],set_gpio_status(ch[data[2]],msg.payload.decode('ascii')),2,True)
 
 
 def set_gpio_status(pin, status):
@@ -41,10 +43,10 @@ def set_gpio_status(pin, status):
     #if (status == "true") or (int(status) == 1) or (status is "ON"):
     #if status == "ON" or  status == "1" or status == "true":
     if ((status == "1") or (status == "ON") or (status == "true")):
-        GPIO.output(pin, GPIO.LOW)
+        GPIO.output(pin, GPIO.HIGH)
         return ch_on[pin]
     else:
-        GPIO.output(pin, GPIO.HIGH)
+        GPIO.output(pin, GPIO.LOW)
         return ch_off[pin]
 
 
@@ -55,7 +57,7 @@ ch_on = dict()
 ch_off = dict()
 for g2 in gpio:
     #print ("Gpio setup",  g2[0])
-    GPIO.setup(g2[0], GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(g2[0], GPIO.OUT, initial=GPIO.LOW)
     ch[g2[1]] = g2[0]	
     ch_on[g2[0]] = g2[2]	
     ch_off[g2[0]] = g2[3]	
