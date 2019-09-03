@@ -51,10 +51,11 @@ topic: home/outputs/bin_out_heating_request/set value: 1 or 0
 
 # install
 ```
+ apt-get install git
  git clone https://github.com/kapik1/rpi-mqtt.git
  cd rpi-mqtt
  
- apt-get install pip3
+ apt-get install python3-pip
  pip3 install setuptools
  pip3 install paho-mqtt
  
@@ -64,6 +65,10 @@ topic: home/outputs/bin_out_heating_request/set value: 1 or 0
 
 
 # run it on startup
+
+
+
+
 
 ```
 cat /etc/rc.local
