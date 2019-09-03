@@ -58,6 +58,7 @@ topic: home/outputs/bin_out_heating_request/set value: 1 or 0
  apt-get install python3-pip
  pip3 install setuptools
  pip3 install paho-mqtt
+ pip3 install RPi.GPIO
  
  ./mqtt-temp
  
@@ -71,15 +72,50 @@ topic: home/outputs/bin_out_heating_request/set value: 1 or 0
 
 
 ```
-cat /etc/rc.local
+root@raspberrypi:/etc/supervisor/conf.d# cat mqtt-bin-in.conf
+[program:mqtt-bin-in]
+process_name=%(program_name)s_%(process_num)02d
+directory=/home/pi/rpi-mqtt/
+command=/home/pi/rpi-mqtt/mqtt-bin-in.py
+autostart=true
+autorestart=true
+user=pi
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/pi/rpi-mqtt/mqtt-bin-in.log
+root@raspberrypi:/etc/supervisor/conf.d# cat mqtt-bin-out.conf
+[program:mqtt-bin-out]
+process_name=%(program_name)s_%(process_num)02d
+directory=/home/pi/rpi-mqtt/
+command=python3 /home/pi/rpi-mqtt/mqtt-bin-out.py
+autostart=true
+autorestart=true
+user=pi
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/pi/rpi-mqtt/mqtt-bin-out.log
+root@raspberrypi:/etc/supervisor/conf.d# cat mqtt-temp.conf
+[program:mqtt-temp]
+process_name=%(program_name)s_%(process_num)02d
+directory=/home/pi/rpi-mqtt/
+command=/home/pi/rpi-mqtt/mqtt-temp.py
+autostart=true
+autorestart=true
+user=pi
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/pi/rpi-mqtt/mqtt-temp.log
 
-...
-# Read 1w temperatures
-cd /root/rpi-mqtt
-/root/rpi-mqtt/mqtt-temp.py &
-/root/rpi-mqtt/mqtt-bin-in.py &
-/root/rpi-mqtt/mqtt-bin-out.py &
-...
+
+supervisorctl  update
+
+root@raspberrypi:~# supervisorctl status
+mqtt-bin-in:mqtt-bin-in_00       RUNNING   pid 1115, uptime 0:09:13
+mqtt-bin-out:mqtt-bin-out_00     RUNNING   pid 1321, uptime 0:00:08
+mqtt-temp:mqtt-temp_00           RUNNING   pid 992, uptime 0:23:22
+
+
+
 ```
 
 
