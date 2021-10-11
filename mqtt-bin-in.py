@@ -33,6 +33,7 @@ GPIO.setmode(GPIO.BCM)
 
 def callback(channel):
     # value zero means active
+    time.sleep(0.2)
     inp=GPIO.input(channel)
     #print ("Callback ch:"+str(channel)+"value"+ str(inp))
     
@@ -53,7 +54,8 @@ ch_state = dict()
 
 for g2 in gpio:
     GPIO.setup(g2[0], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(g2[0], GPIO.BOTH, callback=callback, bouncetime = 350)  
+    #GPIO.add_event_detect(g2[0], GPIO.BOTH, callback=callback, bouncetime = 350)  
+    GPIO.add_event_detect(g2[0], GPIO.BOTH, callback=callback)  
     ch[g2[0]] = g2[1]
     ch_on[g2[0]] = g2[2]
     ch_off[g2[0]] = g2[3]
