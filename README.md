@@ -83,6 +83,8 @@ user=pi
 numprocs=1
 redirect_stderr=true
 stdout_logfile=/home/pi/rpi-mqtt/mqtt-bin-in.log
+
+
 root@raspberrypi:/etc/supervisor/conf.d# cat mqtt-bin-out.conf
 [program:mqtt-bin-out]
 process_name=%(program_name)s_%(process_num)02d
@@ -94,6 +96,7 @@ user=pi
 numprocs=1
 redirect_stderr=true
 stdout_logfile=/home/pi/rpi-mqtt/mqtt-bin-out.log
+
 root@raspberrypi:/etc/supervisor/conf.d# cat mqtt-temp.conf
 [program:mqtt-temp]
 process_name=%(program_name)s_%(process_num)02d
@@ -105,6 +108,18 @@ user=pi
 numprocs=1
 redirect_stderr=true
 stdout_logfile=/home/pi/rpi-mqtt/mqtt-temp.log
+
+root@raspberrypi:/etc/supervisor/conf.d# cat mqtt-gwl-cpm.conf
+[program:mqtt-gwl-cpm3]
+process_name=%(program_name)s_%(process_num)02d
+directory=/home/pi/rpi-mqtt/
+command=/home/pi/rpi-mqtt/mqtt-gwl-cpm3.py
+autostart=true
+autorestart=true
+user=pi
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/pi/rpi-mqtt/mqtt-gwl-cpm3.log
 
 
 supervisorctl  update
