@@ -122,6 +122,26 @@ redirect_stderr=true
 stdout_logfile=/home/pi/rpi-mqtt/mqtt-gwl-cpm3.log
 
 
+To enable read serial raw interface 
+# cat /etc/udev/rules.d/999-hid.rules
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="plugdev"
+
+
+# cat /etc/supervisor/conf.d/mqtt-aexpert.conf
+[program:mqtt-gwl-cpm3]
+process_name=%(program_name)s_%(process_num)02d
+directory=/home/pi/rpi-mqtt/
+command=/home/pi/rpi-mqtt/mqtt-axpert.py
+autostart=true
+autorestart=true
+user=pi
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/pi/rpi-mqtt/mqtt-axpert.log
+
+
+
+
 supervisorctl  update
 
 root@raspberrypi:~# supervisorctl status
