@@ -128,7 +128,7 @@ KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="plugdev"
 
 
 # cat /etc/supervisor/conf.d/mqtt-aexpert.conf
-[program:mqtt-gwl-cpm3]
+[program:mqtt-axpert]
 process_name=%(program_name)s_%(process_num)02d
 directory=/home/pi/rpi-mqtt/
 command=/home/pi/rpi-mqtt/mqtt-axpert.py
