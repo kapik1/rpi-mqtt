@@ -1,5 +1,6 @@
 # rpi-mqtt
 Reading multiple 1w DS1820 thermometers, digital inputs and digital outputs by raspberry pi and publish them to mqtt broker
+and .... Axpert changer, GWL battery and multiple DDS238 energy meters 
 
 
 # Config - temperatures
