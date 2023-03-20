@@ -139,6 +139,18 @@ numprocs=1
 redirect_stderr=true
 stdout_logfile=/home/pi/rpi-mqtt/mqtt-axpert.log
 
+# cat mqtt-dds238.conf
+[program:mqtt-dds238]
+process_name=%(program_name)s_%(process_num)02d
+directory=/home/pi/rpi-mqtt/
+command=/home/pi/rpi-mqtt/mqtt-dds238.py
+autostart=true
+autorestart=true
+user=pi
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/pi/rpi-mqtt/mqtt-dds238.log
+
 
 
 
