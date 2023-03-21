@@ -164,7 +164,20 @@ mqtt-temp:mqtt-temp_00           RUNNING   pid 992, uptime 0:23:22
 
 
 
+Set DDS238 address 
+
+pi@raspberrypi:~/rpi-mqtt $ cat set_address.py
+from dds238 import DDS238
+
+meter = DDS238(modbus_device='/dev/ttyUSB0', meter_id=1)
+meter.change_address(address=2, baudrate=9600)
+
+
+
 ```
+
+
+
 
 
 
